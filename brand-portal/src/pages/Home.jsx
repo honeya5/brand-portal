@@ -1,148 +1,66 @@
 import { Link } from 'react-router-dom'
-import './Home.css'
-
-const FEATURES = [
-  {
-    icon: '◈',
-    title: 'Brand Showcase',
-    desc: 'Upload your logo, materials, and brand story. Your profile becomes a living portfolio that attracts the right partners.',
-    tag: 'For Businesses',
-  },
-  {
-    icon: '⬡',
-    title: 'Smart Applications',
-    desc: 'Customers discover and apply directly through the platform. Track every application from submission to decision.',
-    tag: 'For Customers',
-  },
-  {
-    icon: '◎',
-    title: 'Real-time Updates',
-    desc: 'Instant notifications when statuses change. No inbox digging — everything is tracked in your dashboard.',
-    tag: 'Live',
-  },
-]
-
-const STATS = [
-  { value: '2,400+', label: 'Active Brands' },
-  { value: '18K',    label: 'Applications' },
-  { value: '94%',    label: 'Match Rate' },
-  { value: '<24h',   label: 'Avg Response' },
-]
+import { useAuth } from '../hooks/useAuth'
 
 export default function Home() {
+  const { user } = useAuth()
+
   return (
-    <div className="home">
+    <div style={{ background: '#f8f7f4', minHeight: '100vh' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
 
-      {/* ── Hero ── */}
-      <section className="hero">
-        <div className="hero__glow" />
-        <div className="hero__container">
-          <div className="hero__eyebrow">
-            <span className="hero__dot" />
-            Branding &amp; Application Platform
-          </div>
+        <div style={{
+          display: 'inline-block',
+          background: '#ede9ff', color: '#5b4fcf',
+          fontSize: 13, fontWeight: 500,
+          padding: '6px 16px', borderRadius: 20, marginBottom: 28
+        }}>
+          Live applications · Real-time updates
+        </div>
 
-          <h1 className="hero__title">
-            Where Brands Meet<br />
-            <em>Real Opportunity</em>
-          </h1>
+        <h1 style={{
+          fontSize: 52, fontWeight: 700, lineHeight: 1.15,
+          color: '#1a1a1a', margin: '0 0 20px',
+          letterSpacing: '-1px'
+        }}>
+          Where brands meet<br />
+          <span style={{ color: '#5b4fcf' }}>their partners</span>
+        </h1>
 
-          <p className="hero__subtitle">
-            A centralised portal for businesses to showcase their brand and for customers to discover,
-            apply, and track partnerships — all in one place.
-          </p>
+        <p style={{ fontSize: 18, color: '#666', maxWidth: 480, margin: '0 auto 40px', lineHeight: 1.7 }}>
+          Businesses list their brand. Customers apply for partnerships. Everything happens live.
+        </p>
 
-          <div className="hero__cta">
-            <Link to="/register" className="btn-primary">
-              Start for free
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <Link to="/explore" className="btn btn-primary" style={{ fontSize: 15, padding: '13px 28px', textDecoration: 'none' }}>
+            Explore brands →
+          </Link>
+          {!user && (
+            <Link to="/register" className="btn btn-ghost" style={{ fontSize: 15, padding: '13px 28px', textDecoration: 'none' }}>
+              Create account
             </Link>
-            <Link to="/explore" className="btn-ghost">Explore brands</Link>
-          </div>
-
-          {/* Stats */}
-          <div className="hero__stats">
-            {STATS.map(s => (
-              <div key={s.label} className="hero__stat">
-                <span className="hero__stat-value">{s.value}</span>
-                <span className="hero__stat-label">{s.label}</span>
-              </div>
-            ))}
-          </div>
+          )}
         </div>
-      </section>
 
-      {/* ── Features ── */}
-      <section className="features">
-        <div className="features__container">
-          <div className="features__header">
-            <span className="section-tag">Platform Features</span>
-            <h2 className="features__title">Everything you need,<br />nothing you don't</h2>
-          </div>
-
-          <div className="features__grid">
-            {FEATURES.map((f, i) => (
-              <div key={f.title} className="feat-card" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="feat-card__top">
-                  <span className="feat-card__icon">{f.icon}</span>
-                  <span className="feat-card__tag">{f.tag}</span>
-                </div>
-                <h3 className="feat-card__title">{f.title}</h3>
-                <p className="feat-card__desc">{f.desc}</p>
-              </div>
-            ))}
-          </div>
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16,
+          marginTop: 80, textAlign: 'left'
+        }}>
+          {[
+            { icon: '◆', title: 'Build your brand', desc: 'Upload logo, add tagline, describe your services.' },
+            { icon: '◈', title: 'Customers apply', desc: 'A clean 2-step form. No friction, just intent.' },
+            { icon: '◉', title: 'Live notifications', desc: 'See applications arrive in real-time. No refresh needed.' }
+          ].map(f => (
+            <div key={f.title} style={{
+              background: '#fff', border: '1px solid #e8e6e0',
+              borderRadius: 12, padding: '20px'
+            }}>
+              <div style={{ fontSize: 20, marginBottom: 10, color: '#5b4fcf' }}>{f.icon}</div>
+              <p style={{ fontWeight: 600, fontSize: 14, margin: '0 0 6px', color: '#1a1a1a' }}>{f.title}</p>
+              <p style={{ fontSize: 13, color: '#888', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
+            </div>
+          ))}
         </div>
-      </section>
-
-      {/* ── How it works ── */}
-      <section className="how">
-        <div className="how__container">
-          <span className="section-tag">How it works</span>
-          <h2 className="how__title">Up and running in minutes</h2>
-
-          <div className="how__steps">
-            {[
-              { n: '01', title: 'Create your account', desc: 'Sign up as a business or customer. Takes under a minute.' },
-              { n: '02', title: 'Build your profile', desc: 'Businesses set up their brand page. Customers browse the directory.' },
-              { n: '03', title: 'Apply or review', desc: 'Customers apply to brands. Businesses manage applications from their dashboard.' },
-              { n: '04', title: 'Partner up', desc: 'Approve or decline — all tracked, all in one place.' },
-            ].map((s, i) => (
-              <div key={s.n} className="how__step">
-                <div className="how__step-num">{s.n}</div>
-                <div className="how__step-body">
-                  <h4 className="how__step-title">{s.title}</h4>
-                  <p className="how__step-desc">{s.desc}</p>
-                </div>
-                {i < 3 && <div className="how__step-line" />}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA Banner ── */}
-      <section className="cta-banner">
-        <div className="cta-banner__inner">
-          <div className="cta-banner__glow" />
-          <h2 className="cta-banner__title">Ready to grow your network?</h2>
-          <p className="cta-banner__sub">Join thousands of brands and customers already on the platform.</p>
-          <div className="cta-banner__actions">
-            <Link to="/register" className="btn-primary">Create free account</Link>
-            <Link to="/explore" className="btn-outline">Browse brands</Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="footer">
-        <div className="footer__inner">
-          <span className="footer__brand">Brand<span>Portal</span></span>
-          <span className="footer__copy">© 2024 BrandPortal. Hackathon 18.</span>
-        </div>
-      </footer>
+      </div>
     </div>
   )
 }

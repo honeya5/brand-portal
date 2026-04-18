@@ -1,13 +1,17 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import LoadingSpinner from './LoadingSpinner'
 
-export default function ProtectedRoute({ children, allowedRoles = [] }) {
+export default function ProtectedRoute({ children, allowedRole }) {
   const { user, role, loading } = useAuth()
 
-  if (loading) return <LoadingSpinner fullScreen text="Authenticating…" />
+  if (loading) return (
+    <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 80 }}>
+      <div className="spinner" />
+    </div>
+  )
+
   if (!user) return <Navigate to="/login" replace />
-  if (allowedRoles.length > 0 && !allowedRoles.includes(role)) return <Navigate to="/dashboard" replace />
+  if (allowedRole && role !== allowedRole) return <Navigate to="/dashboard" replace />
 
   return children
 }

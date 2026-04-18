@@ -1,109 +1,61 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { logout } from '../firebase/auth'
-import toast from 'react-hot-toast'
-import './Navbar.css'
+import { logoutUser } from '../firebase/auth'
 
 export default function Navbar() {
   const { user, role } = useAuth()
-  const location = useLocation()
-  const [scrolled, setScrolled] = useState(false)
-  const [menuOpen, setMenuOpen] = useState(false)
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll)
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
-  useEffect(() => { setMenuOpen(false) }, [location])
+  const nav = useNavigate()
 
   const handleLogout = async () => {
-    await logout()
-    toast.success('Logged out successfully!')
+    await logoutUser()
+    nav('/')
   }
 
-  const isActive = (path) => location.pathname === path
-
-  const initials = user?.displayName
-    ? user.displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    : user?.email?.[0].toUpperCase() ?? '?'
-
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
-      <div className="navbar__inner">
-        {/* Logo */}
-        <Link to="/" className="navbar__logo">
-          <span className="navbar__logo-mark">B</span>
-          Brand<span className="navbar__logo-accent">Portal</span>
+    <nav style={{
+      background: '#fff',
+      borderBottom: '1px solid #e8e6e0',
+      padding: '0 24px',
+      height: 60,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      position: 'sticky',
+      top: 0,
+      zIndex: 100
+    }}>
+      <Link to="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{
+          width: 28, height: 28,
+          background: '#5b4fcf',
+          borderRadius: 8,
+          display: 'flex', alignItems: 'center', justifyContent: 'center'
+        }}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M2 7 L7 2 L12 7 L7 12 Z" fill="white"/>
+          </svg>
+        </div>
+        <span style={{ fontWeight: 600, fontSize: 16, color: '#1a1a1a' }}>Brandr</span>
+      </Link>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Link to="/explore" style={{ color: '#555', textDecoration: 'none', fontSize: 14, padding: '8px 12px', borderRadius: 8 }}
+          onMouseEnter={e => e.target.style.background = '#f0eeea'}
+          onMouseLeave={e => e.target.style.background = 'transparent'}>
+          Explore
         </Link>
-
-        {/* Desktop links */}
-        <div className="navbar__links">
-          <Link to="/explore" className={`navbar__link ${isActive('/explore') ? 'navbar__link--active' : ''}`}>
-            Explore
-          </Link>
-          {user && (
-            <Link to="/dashboard" className={`navbar__link ${isActive('/dashboard') ? 'navbar__link--active' : ''}`}>
-              Dashboard
-            </Link>
-          )}
-        </div>
-
-        {/* Desktop actions */}
-        <div className="navbar__actions">
-          {user ? (
-            <>
-              <div className="navbar__user-info">
-                <span className="navbar__user-role">{role === 'business' ? 'Business' : 'Customer'}</span>
-                <span className="navbar__user-name">{user.displayName || user.email}</span>
-              </div>
-              <div className="navbar__avatar">{initials}</div>
-              <button onClick={handleLogout} className="navbar__logout">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                  <polyline points="16 17 21 12 16 7"/>
-                  <line x1="21" y1="12" x2="9" y2="12"/>
-                </svg>
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="navbar__link">Login</Link>
-              <Link to="/register" className="navbar__signup">Get Started</Link>
-            </>
-          )}
-        </div>
-
-        {/* Mobile hamburger */}
-        <button className="navbar__hamburger" onClick={() => setMenuOpen(o => !o)} aria-label="Toggle menu">
-          <span className={menuOpen ? 'open' : ''} />
-          <span className={menuOpen ? 'open' : ''} />
-          <span className={menuOpen ? 'open' : ''} />
-        </button>
+        {user ? (
+          <>
+            <Link to="/dashboard" className="btn btn-ghost" style={{ textDecoration: 'none', fontSize: 13, padding: '8px 14px' }}>Dashboard</Link>
+            <button onClick={handleLogout} className="btn btn-outline" style={{ fontSize: 13, padding: '8px 14px' }}>Log out</button>
+          </>
+        ) : (
+          <>
+            <Link to="/login" className="btn btn-ghost" style={{ textDecoration: 'none', fontSize: 13, padding: '8px 14px' }}>Log in</Link>
+            <Link to="/register" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13, padding: '8px 14px' }}>Sign up</Link>
+          </>
+        )}
       </div>
-
-      {/* Mobile menu */}
-      {menuOpen && (
-        <div className="navbar__mobile">
-          <Link to="/explore" className="navbar__mobile-link">Explore</Link>
-          {user ? (
-            <>
-              <Link to="/dashboard" className="navbar__mobile-link">Dashboard</Link>
-              <div className="navbar__mobile-divider" />
-              <span className="navbar__mobile-user">{user.displayName || user.email} · {role}</span>
-              <button onClick={handleLogout} className="navbar__mobile-logout">Logout</button>
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="navbar__mobile-link">Login</Link>
-              <Link to="/register" className="navbar__mobile-cta">Get Started →</Link>
-            </>
-          )}
-        </div>
-      )}
     </nav>
   )
 }

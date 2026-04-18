@@ -1,185 +1,82 @@
-import { useAuth } from '../hooks/useAuth'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { logout } from '../firebase/auth'
-import toast from 'react-hot-toast'
-import './Dashboard.css'
-
-const BUSINESS_CARDS = [
-  {
-    to: '/manage-brand',
-    icon: '◈',
-    title: 'Manage Brand',
-    desc: 'Update your brand profile, logo, and marketing materials',
-    tag: 'Setup',
-  },
-  {
-    to: '/applications',
-    icon: '◎',
-    title: 'Applications',
-    desc: 'Review incoming partnership and service applications',
-    tag: 'Action needed',
-    highlight: true,
-  },
-  {
-    to: '/upload-materials',
-    icon: '⬡',
-    title: 'Upload Materials',
-    desc: 'Add brochures, images, and promotional content',
-    tag: 'Media',
-  },
-  {
-    to: '/analytics',
-    icon: '◇',
-    title: 'Analytics',
-    desc: 'Track profile views, application rates, and engagement',
-    tag: 'Insights',
-  },
-]
-
-const CUSTOMER_CARDS = [
-  {
-    to: '/explore',
-    icon: '⬡',
-    title: 'Explore Brands',
-    desc: 'Browse businesses and discover new partnership opportunities',
-    tag: 'Discover',
-    highlight: true,
-  },
-  {
-    to: '/my-applications',
-    icon: '◎',
-    title: 'My Applications',
-    desc: 'Track all your submitted applications and their statuses',
-    tag: 'Tracking',
-  },
-  {
-    to: '/saved',
-    icon: '◇',
-    title: 'Saved Brands',
-    desc: 'Brands you\'ve bookmarked for later review',
-    tag: 'Saved',
-  },
-  {
-    to: '/profile',
-    icon: '◈',
-    title: 'My Profile',
-    desc: 'Update your contact info and application preferences',
-    tag: 'Settings',
-  },
-]
-
-const STATS_BUSINESS = [
-  { label: 'Profile Views', value: '—' },
-  { label: 'Applications In', value: '—' },
-  { label: 'Approved', value: '—' },
-  { label: 'Pending', value: '—' },
-]
-
-const STATS_CUSTOMER = [
-  { label: 'Applied To', value: '—' },
-  { label: 'In Review', value: '—' },
-  { label: 'Approved', value: '—' },
-  { label: 'Saved Brands', value: '—' },
-]
+import { useAuth } from '../hooks/useAuth'
+import { getBrandByOwner } from '../firebase/brands'
+import { getMyApplications } from '../firebase/applications'
+import StatusBadge from '../components/StatusBadge'
+import LoadingSpinner from '../components/LoadingSpinner'
 
 export default function Dashboard() {
   const { user, role } = useAuth()
+  const [brand, setBrand]   = useState(null)
+  const [apps, setApps]     = useState([])
+  const [loading, setLoading] = useState(true)
 
-  const isBusiness = role === 'business'
-  const cards = isBusiness ? BUSINESS_CARDS : CUSTOMER_CARDS
-  const stats = isBusiness ? STATS_BUSINESS : STATS_CUSTOMER
+  useEffect(() => {
+    if (!user) return
+    const load = async () => {
+      if (role === 'business') {
+        const b = await getBrandByOwner(user.uid)
+        setBrand(b)
+      } else {
+        const a = await getMyApplications(user.uid)
+        setApps(a)
+      }
+      setLoading(false)
+    }
+    load()
+  }, [user, role])
 
-  const initials = user?.displayName
-    ? user.displayName.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
-    : user?.email?.[0].toUpperCase() ?? '?'
-
-  const firstName = user?.displayName?.split(' ')[0] || 'there'
-
-  const handleLogout = async () => {
-    await logout()
-    toast.success('Logged out successfully!')
-  }
+  if (loading) return <LoadingSpinner fullPage />
 
   return (
-    <div className="dash">
-      <div className="dash__container">
-
-        {/* ── Header ── */}
-        <div className="dash__header">
-          <div className="dash__welcome">
-            <div className="dash__avatar">{initials}</div>
-            <div>
-              <p className="dash__greeting">Good day, {firstName} 👋</p>
-              <p className="dash__role-badge">
-                <span className={`role-pill role-pill--${role}`}>{isBusiness ? 'Business Account' : 'Customer Account'}</span>
-              </p>
-            </div>
-          </div>
-          <div className="dash__header-actions">
-            <button onClick={handleLogout} className="dash__logout-btn">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
-              </svg>
-              Sign out
-            </button>
-          </div>
-        </div>
-
-        {/* ── Stats ── */}
-        <div className="dash__stats">
-          {stats.map(s => (
-            <div key={s.label} className="stat-tile">
-              <span className="stat-tile__value">{s.value}</span>
-              <span className="stat-tile__label">{s.label}</span>
-            </div>
-          ))}
-        </div>
-
-        {/* ── Section heading ── */}
-        <div className="dash__section-head">
-          <h2 className="dash__section-title">
-            {isBusiness ? 'Brand Management' : 'Your Workspace'}
-          </h2>
-          <span className="dash__section-sub">
-            {isBusiness
-              ? 'Everything you need to manage your brand presence'
-              : 'Discover brands and track your partnership applications'}
-          </span>
-        </div>
-
-        {/* ── Cards grid ── */}
-        <div className="dash__grid">
-          {cards.map((c, i) => (
-            <Link key={c.to} to={c.to} className={`dash-card ${c.highlight ? 'dash-card--highlight' : ''}`} style={{ animationDelay: `${i * 0.07}s` }}>
-              <div className="dash-card__top">
-                <span className="dash-card__icon">{c.icon}</span>
-                <span className={`dash-card__tag ${c.highlight ? 'dash-card__tag--accent' : ''}`}>{c.tag}</span>
-              </div>
-              <h3 className="dash-card__title">{c.title}</h3>
-              <p className="dash-card__desc">{c.desc}</p>
-              <div className="dash-card__arrow">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </Link>
-          ))}
-        </div>
-
-        {/* ── Quick info bar ── */}
-        <div className="dash__info-bar">
-          <span className="dash__info-icon">ℹ</span>
-          <span className="dash__info-text">
-            {isBusiness
-              ? 'Complete your brand profile to start receiving applications from customers.'
-              : 'Browse the Explore page to discover brands and submit your first application.'}
-          </span>
-          <Link to={isBusiness ? '/manage-brand' : '/explore'} className="dash__info-link">
-            {isBusiness ? 'Set up brand →' : 'Explore now →'}
-          </Link>
-        </div>
-
+    <div className="page">
+      <div style={{ marginBottom: 32 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 4px' }}>Dashboard</h1>
+        <p style={{ color: '#888', margin: 0, fontSize: 14 }}>{role === 'business' ? 'Manage your brand and applications' : 'Track your applications'}</p>
       </div>
+
+      {role === 'business' ? (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: 16 }}>
+          <div className="card" style={{ borderLeft: '3px solid #5b4fcf' }}>
+            <p style={{ fontSize: 13, color: '#888', margin: '0 0 8px' }}>Your brand</p>
+            <p style={{ fontWeight: 600, fontSize: 18, margin: '0 0 16px' }}>{brand?.name || 'No brand yet'}</p>
+            <Link to="/manage-brand" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}>
+              {brand ? 'Edit brand' : 'Create brand'}
+            </Link>
+          </div>
+          {brand && (
+            <div className="card" style={{ borderLeft: '3px solid #1a9e6e' }}>
+              <p style={{ fontSize: 13, color: '#888', margin: '0 0 8px' }}>Applications</p>
+              <p style={{ fontWeight: 600, fontSize: 18, margin: '0 0 16px' }}>View incoming</p>
+              <Link to="/applications" className="btn btn-outline" style={{ textDecoration: 'none', fontSize: 13 }}>
+                Open live tracker →
+              </Link>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontWeight: 600, fontSize: 18, margin: 0 }}>My applications</h2>
+            <Link to="/explore" className="btn btn-primary" style={{ textDecoration: 'none', fontSize: 13 }}>Browse brands</Link>
+          </div>
+          {apps.length === 0
+            ? <div style={{ textAlign: 'center', padding: '60px 0', color: '#888', fontSize: 14 }}>No applications yet. Explore brands to get started.</div>
+            : <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {apps.map(a => (
+                  <div key={a.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
+                    <div>
+                      <p style={{ fontWeight: 500, margin: '0 0 4px' }}>{a.brandId}</p>
+                      <p style={{ fontSize: 12, color: '#aaa', margin: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <StatusBadge status={a.status} />
+                  </div>
+                ))}
+              </div>
+          }
+        </div>
+      )}
     </div>
   )
 }
