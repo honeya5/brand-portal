@@ -39,7 +39,7 @@ export default function BrandProfile() {
         }
       </div>
 
-      <div style={{ paddingTop: 56, paddingLeft: 8 }}>
+      <div style={{ paddingTop: 48, paddingLeft: 160 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 6px' }}>{brand.name}</h1>
         <p style={{ color: '#888', fontSize: 15, margin: '0 0 20px' }}>{brand.tagline}</p>
 
