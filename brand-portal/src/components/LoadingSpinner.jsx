@@ -1,7 +1,22 @@
-export default function LoadingSpinner() {
+import './LoadingSpinner.css'
+
+export default function LoadingSpinner({ fullScreen = false, text = '' }) {
+  if (fullScreen) {
+    return (
+      <div className="spinner-overlay">
+        <div className="spinner-wrap">
+          <div className="spinner-ring" />
+          <div className="spinner-logo">B</div>
+        </div>
+        {text && <p className="spinner-text">{text}</p>}
+      </div>
+    )
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-[400px]">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div className="spinner-inline">
+      <div className="spinner-ring spinner-ring--sm" />
+      {text && <span className="spinner-label">{text}</span>}
     </div>
   )
 }
