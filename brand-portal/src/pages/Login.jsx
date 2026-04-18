@@ -10,15 +10,17 @@ export default function Login() {
   const nav = useNavigate()
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true); setError('')
-    try {
-      await loginUser(email, password)
-      nav('/dashboard')
-    } catch (err) {
-      setError('Invalid email or password')
-    } finally { setLoading(false) }
+  e.preventDefault()
+  setLoading(true); setError('')
+  try {
+    await loginUser(email, password)
+    // Small wait for AuthContext to update role
+    setTimeout(() => nav('/dashboard'), 300)
+  } catch (err) {
+    setError('Invalid email or password')
+    setLoading(false)
   }
+}
 
   return (
     <div className="page-sm">

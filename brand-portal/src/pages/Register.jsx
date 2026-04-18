@@ -11,16 +11,17 @@ export default function Register() {
   const [loading, setLoading] = useState(false)
   const nav = useNavigate()
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setLoading(true); setError('')
-    try {
-      await registerUser(email, password, role, name)
-      nav('/dashboard')
-    } catch (err) {
-      setError(err.message)
-    } finally { setLoading(false) }
+ const handleSubmit = async (e) => {
+  e.preventDefault()
+  setLoading(true); setError('')
+  try {
+    await registerUser(email, password, role, name)
+    setTimeout(() => nav('/dashboard'), 300)
+  } catch (err) {
+    setError(err.message)
+    setLoading(false)
   }
+}
 
   return (
     <div className="page-sm">
