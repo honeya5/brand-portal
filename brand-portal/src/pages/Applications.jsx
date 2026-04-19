@@ -64,8 +64,9 @@ export default function Applications() {
           </div>
         </div>
         <span style={{
-          background: '#ede9ff', color: '#5b4fcf', fontWeight: 600,
-          fontSize: 14, padding: '6px 14px', borderRadius: 20
+          background: '#1a1a2e', color: '#a89cf7', fontWeight: 600,
+          fontSize: 14, padding: '6px 14px', borderRadius: 20,
+          border: '1px solid #2e2e4e'
         }}>{apps.length} total</span>
       </div>
 
@@ -82,8 +83,8 @@ export default function Applications() {
 
                 {/* Application card */}
                 <div style={{
-                  background: newIds.has(app.id) ? '#fdfcff' : '#fff',
-                  border: newIds.has(app.id) ? '1.5px solid #5b4fcf' : '1px solid #e8e6e0',
+                  background: newIds.has(app.id) ? '#13132a' : '#0d0d14',
+                  border: newIds.has(app.id) ? '1.5px solid #5b4fcf' : '1px solid #1e1e2e',
                   borderRadius: app.status === 'approved' ? '14px 14px 0 0' : 14,
                   padding: '20px 24px',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
@@ -93,13 +94,13 @@ export default function Applications() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
                       <div style={{
                         width: 36, height: 36, borderRadius: '50%',
-                        background: '#ede9ff', color: '#5b4fcf',
+                        background: '#1e1a3a', color: '#a89cf7',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         fontWeight: 600, fontSize: 14
                       }}>{app.name?.[0] || '?'}</div>
                       <div>
-                        <p style={{ fontWeight: 600, margin: 0, fontSize: 15 }}>{app.name}</p>
-                        <p style={{ color: '#aaa', fontSize: 12, margin: 0 }}>{app.email}</p>
+                        <p style={{ fontWeight: 600, margin: 0, fontSize: 15, color: '#e8e8f0' }}>{app.name}</p>
+                        <p style={{ color: '#555', fontSize: 12, margin: 0 }}>{app.email}</p>
                       </div>
                       <StatusBadge status={app.status} />
                       {newIds.has(app.id) && (
@@ -107,15 +108,15 @@ export default function Applications() {
                       )}
                     </div>
                     {app.why && (
-                      <p style={{ color: '#555', fontSize: 13, lineHeight: 1.6, margin: '8px 0 0', maxWidth: 480 }}>{app.why}</p>
+                      <p style={{ color: '#888', fontSize: 13, lineHeight: 1.6, margin: '8px 0 0', maxWidth: 480 }}>{app.why}</p>
                     )}
-                    <p style={{ color: '#ccc', fontSize: 11, margin: '8px 0 0' }}>{new Date(app.createdAt).toLocaleString()}</p>
+                    <p style={{ color: '#444', fontSize: 11, margin: '8px 0 0' }}>{new Date(app.createdAt).toLocaleString()}</p>
                   </div>
 
                   {app.status === 'pending' && (
                     <div style={{ display: 'flex', gap: 8, marginLeft: 16, flexShrink: 0 }}>
                       <button className="btn btn-ghost" onClick={() => handleStatus(app.id, 'rejected')}
-                        style={{ fontSize: 12, padding: '7px 14px', color: '#c0392b', borderColor: '#f8d7d7' }}>
+                        style={{ fontSize: 12, padding: '7px 14px', color: '#c0392b', borderColor: '#2a1a1a' }}>
                         Reject
                       </button>
                       <button className="btn btn-primary" onClick={() => handleStatus(app.id, 'approved')}
@@ -126,15 +127,23 @@ export default function Applications() {
                   )}
                 </div>
 
-                {/* Message thread — only shows for approved applications */}
+                {/* Open chat button — only for approved applications */}
                 {app.status === 'approved' && (
-  <Link
-    to={`/chat/${app.id}/${app.brandId || ''}/${encodeURIComponent(app.name)}`}
-    className="btn btn-outline"
-    style={{ textDecoration: 'none', fontSize: 12, padding: '7px 14px', marginLeft: 16, flexShrink: 0 }}>
-    Open chat →
-  </Link>
-)}
+                  <div style={{
+                    background: '#0a0a0f',
+                    border: '1px solid #1e1e2e',
+                    borderTop: 'none',
+                    borderRadius: '0 0 14px 14px',
+                    padding: '10px 24px'
+                  }}>
+                    <Link
+                      to={`/chat/${app.id}/${app.brandId || ''}/${encodeURIComponent(app.name)}`}
+                      className="btn btn-outline"
+                      style={{ textDecoration: 'none', fontSize: 12, padding: '7px 14px', flexShrink: 0 }}>
+                      Open chat →
+                    </Link>
+                  </div>
+                )}
 
               </div>
             ))}
