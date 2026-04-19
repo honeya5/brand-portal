@@ -22,13 +22,9 @@ export default function ManageBrand() {
     if (!user) return
     getBrandByOwner(user.uid).then(b => {
       if (b) {
-        setBrandId(b.id)
-        setName(b.name || '')
-        setTagline(b.tagline || '')
-        setDescription(b.description || '')
-        setCategory(b.category || '')
-        setCoverColor(b.coverColor || COLORS[0])
-        setLogoUrl(b.logoUrl || '')
+        setBrandId(b.id); setName(b.name || ''); setTagline(b.tagline || '')
+        setDescription(b.description || ''); setCategory(b.category || '')
+        setCoverColor(b.coverColor || COLORS[0]); setLogoUrl(b.logoUrl || '')
       }
     })
   }, [user])
@@ -41,136 +37,132 @@ export default function ManageBrand() {
     try {
       const finalLogoUrl = logoUrl || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=5b4fcf&color=fff&size=200&bold=true`
       const data = { name, tagline, description, category, coverColor, logoUrl: finalLogoUrl }
-      if (brandId) {
-        await updateBrand(brandId, data)
-      } else {
-        await createBrand(user.uid, data)
-      }
+      if (brandId) { await updateBrand(brandId, data) } else { await createBrand(user.uid, data) }
       showToast('Brand saved!')
       nav('/dashboard')
-    } catch (err) {
+    } catch {
       showToast('Error saving. Try again.')
     } finally {
       setLoading(false)
     }
   }
 
+  const inputStyle = {
+    width: '100%', padding: '11px 14px',
+    background: '#080810', border: '1px solid #1e1e2e',
+    borderRadius: 10, color: '#e8e8f0', fontSize: 14,
+    outline: 'none', fontFamily: 'inherit',
+    boxSizing: 'border-box', transition: 'border-color 0.15s'
+  }
+  const labelStyle = {
+    display: 'block', fontSize: 11, fontWeight: 600,
+    color: '#555', marginBottom: 8, letterSpacing: '0.5px'
+  }
+  const cardStyle = {
+    background: '#0f0f1a', border: '1px solid #1e1e2e',
+    borderRadius: 16, padding: '24px', marginBottom: 16
+  }
+
   return (
     <div className="page" style={{ maxWidth: 600 }}>
-      <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 6px' }}>
-        {brandId ? 'Edit brand' : 'Create brand'}
-      </h1>
-      <p style={{ color: '#888', margin: '0 0 28px', fontSize: 14 }}>Your public brand page</p>
+      <div style={{ marginBottom: 28 }}>
+        <h1 style={{ fontSize: 28, fontWeight: 700, margin: '0 0 6px', color: '#e8e8f0' }}>
+          {brandId ? 'Edit brand' : 'Create brand'}
+        </h1>
+        <p style={{ color: '#444', margin: 0, fontSize: 14 }}>Your public brand page</p>
+      </div>
 
       <form onSubmit={handleSave}>
+        <div style={cardStyle}>
+          <h3 style={{ fontWeight: 600, margin: '0 0 20px', color: '#e8e8f0', fontSize: 15 }}>Brand details</h3>
 
-        <div className="card" style={{ marginBottom: 16 }}>
-          <h3 style={{ fontWeight: 600, margin: '0 0 16px' }}>Brand details</h3>
-
-          <div className="form-group">
-            <label className="label">Brand name *</label>
-            <input
-              className="input"
-              value={name}
-              onChange={e => setName(e.target.value)}
-              required
+          <div style={{ marginBottom: 18 }}>
+            <label style={labelStyle}>BRAND NAME *</label>
+            <input style={inputStyle} value={name} onChange={e => setName(e.target.value)} required
               placeholder="Acme Inc."
-            />
+              onFocus={e => e.target.style.borderColor = '#5b4fcf'}
+              onBlur={e => e.target.style.borderColor = '#1e1e2e'} />
           </div>
-
-          <div className="form-group">
-            <label className="label">Tagline</label>
-            <input
-              className="input"
-              value={tagline}
-              onChange={e => setTagline(e.target.value)}
+          <div style={{ marginBottom: 18 }}>
+            <label style={labelStyle}>TAGLINE</label>
+            <input style={inputStyle} value={tagline} onChange={e => setTagline(e.target.value)}
               placeholder="We build things people love"
-            />
+              onFocus={e => e.target.style.borderColor = '#5b4fcf'}
+              onBlur={e => e.target.style.borderColor = '#1e1e2e'} />
           </div>
-
-          <div className="form-group">
-            <label className="label">Category</label>
-            <select className="input" value={category} onChange={e => setCategory(e.target.value)}>
+          <div style={{ marginBottom: 18 }}>
+            <label style={labelStyle}>CATEGORY</label>
+            <select style={{ ...inputStyle, cursor: 'pointer' }} value={category} onChange={e => setCategory(e.target.value)}
+              onFocus={e => e.target.style.borderColor = '#5b4fcf'}
+              onBlur={e => e.target.style.borderColor = '#1e1e2e'}>
               <option value="">Select category</option>
               {['Technology','Fashion','Food & Beverage','Health','Finance','Education','Other'].map(c => (
-                <option key={c}>{c}</option>
+                <option key={c} style={{ background: '#0f0f1a' }}>{c}</option>
               ))}
             </select>
           </div>
-
-          <div className="form-group">
-            <label className="label">Description</label>
-            <textarea
-              className="input"
-              rows={4}
-              value={description}
-              onChange={e => setDescription(e.target.value)}
+          <div>
+            <label style={labelStyle}>DESCRIPTION</label>
+            <textarea style={{ ...inputStyle, resize: 'vertical', lineHeight: 1.6 }}
+              rows={4} value={description} onChange={e => setDescription(e.target.value)}
               placeholder="Tell partners what you do and what you're looking for…"
-              style={{ resize: 'vertical' }}
-            />
+              onFocus={e => e.target.style.borderColor = '#5b4fcf'}
+              onBlur={e => e.target.style.borderColor = '#1e1e2e'} />
           </div>
         </div>
 
-        <div className="card" style={{ marginBottom: 16 }}>
-          <h3 style={{ fontWeight: 600, margin: '0 0 16px' }}>Visual identity</h3>
+        <div style={cardStyle}>
+          <h3 style={{ fontWeight: 600, margin: '0 0 20px', color: '#e8e8f0', fontSize: 15 }}>Visual identity</h3>
 
-          <div className="form-group">
-            <label className="label">Logo</label>
+          <div style={{ marginBottom: 20 }}>
+            <label style={labelStyle}>LOGO</label>
             <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
               <div style={{
-                width: 52, height: 52, borderRadius: 12, flexShrink: 0,
-                border: '1px solid #e8e6e0', overflow: 'hidden',
-                background: '#f8f7f4', display: 'flex', alignItems: 'center', justifyContent: 'center'
+                width: 56, height: 56, borderRadius: 12, flexShrink: 0,
+                border: '1px solid #1e1e2e', overflow: 'hidden',
+                background: '#080810', display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}>
                 {logoUrl
-                  ? <img
-                      src={logoUrl}
-                      alt=""
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      onError={e => { e.target.style.display = 'none' }}
-                    />
-                  : <span style={{ fontSize: 11, color: '#ccc' }}>No logo</span>
+                  ? <img src={logoUrl} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      onError={e => { e.target.style.display = 'none' }} />
+                  : <span style={{ fontSize: 11, color: '#333' }}>No logo</span>
                 }
               </div>
               <div style={{ flex: 1 }}>
-                <input
-                  className="input"
-                  placeholder="https://example.com/logo.png"
-                  value={logoUrl}
-                  onChange={e => setLogoUrl(e.target.value)}
-                />
-                <p style={{ fontSize: 12, color: '#aaa', margin: '6px 0 0' }}>
-                  Paste any public image URL. Leave blank to auto-generate from brand name.
+                <input style={inputStyle} placeholder="https://example.com/logo.png"
+                  value={logoUrl} onChange={e => setLogoUrl(e.target.value)}
+                  onFocus={e => e.target.style.borderColor = '#5b4fcf'}
+                  onBlur={e => e.target.style.borderColor = '#1e1e2e'} />
+                <p style={{ fontSize: 12, color: '#333', margin: '6px 0 0' }}>
+                  Paste any public image URL. Leave blank to auto-generate.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="form-group" style={{ marginBottom: 0 }}>
-            <label className="label">Cover color</label>
+          <div>
+            <label style={labelStyle}>COVER COLOR</label>
             <div style={{ display: 'flex', gap: 8 }}>
               {COLORS.map(c => (
-                <div
-                  key={c}
-                  onClick={() => setCoverColor(c)}
-                  style={{
-                    width: 32, height: 32, borderRadius: 8,
-                    background: c, cursor: 'pointer',
-                    border: coverColor === c ? '2.5px solid #5b4fcf' : '1.5px solid #e8e6e0',
-                    transition: 'transform 0.1s'
-                  }}
-                />
+                <div key={c} onClick={() => setCoverColor(c)} style={{
+                  width: 32, height: 32, borderRadius: 8, background: c, cursor: 'pointer',
+                  border: coverColor === c ? '2.5px solid #5b4fcf' : '1.5px solid #1e1e2e',
+                  transition: 'transform 0.1s, border-color 0.15s',
+                  transform: coverColor === c ? 'scale(1.15)' : 'scale(1)'
+                }} />
               ))}
             </div>
           </div>
         </div>
 
-        <button
-          className="btn btn-primary"
-          type="submit"
-          disabled={loading}
-          style={{ width: '100%', justifyContent: 'center', padding: '13px', fontSize: 15 }}
-        >
+        <button type="submit" disabled={loading} style={{
+          width: '100%', padding: '14px',
+          background: 'linear-gradient(135deg, #5b4fcf, #7c6ee0)',
+          color: 'white', border: 'none', borderRadius: 12,
+          fontSize: 15, fontWeight: 600, cursor: loading ? 'default' : 'pointer',
+          fontFamily: 'inherit', opacity: loading ? 0.7 : 1,
+          boxShadow: '0 4px 24px rgba(91,79,207,0.35)'
+        }}>
           {loading ? 'Saving…' : (brandId ? 'Save changes' : 'Create brand')}
         </button>
       </form>

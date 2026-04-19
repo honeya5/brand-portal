@@ -3,43 +3,51 @@ import { Link } from 'react-router-dom'
 export default function BrandCard({ brand }) {
   return (
     <Link to={`/brand/${brand.id}`} style={{ textDecoration: 'none' }}>
-      <div style={{
-        background: '#111118',
-        border: '1px solid #1e1e2e',
-        borderRadius: 16,
+      <div className="brand-card-hover" style={{
+        background: '#0f0f1a',
+        border: '1px solid #2a2a3e',
+        borderRadius: 14,
         overflow: 'hidden',
-        transition: 'border-color 0.15s, transform 0.15s',
-        cursor: 'pointer'
-      }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = '#6c5ce7'; e.currentTarget.style.transform = 'translateY(-3px)' }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = '#1e1e2e'; e.currentTarget.style.transform = 'none' }}>
-
+        cursor: 'pointer',
+      }}>
+        {/* Cover image area */}
         <div style={{
-          height: 80,
+          height: 120,
           background: brand.coverColor || '#1a1a2e',
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden'
         }}>
           {brand.logoUrl
-            ? <img src={brand.logoUrl} alt="" style={{ width: 52, height: 52, borderRadius: 12, objectFit: 'cover', border: '2px solid rgba(255,255,255,0.1)' }} />
+            ? <img
+                src={brand.logoUrl}
+                alt={brand.name}
+                style={{ width: 72, height: 72, objectFit: 'contain', borderRadius: 12 }}
+                onError={e => e.target.style.display = 'none'}
+              />
             : <div style={{
-                width: 52, height: 52, borderRadius: 12,
-                background: '#6c5ce7', color: 'white',
+                width: 72, height: 72, borderRadius: 12,
+                background: 'linear-gradient(135deg, #5b4fcf, #7c6ee0)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 20, fontWeight: 700
+                color: 'white', fontSize: 28, fontWeight: 700
               }}>{brand.name?.[0]}</div>
           }
         </div>
 
-        <div style={{ padding: '16px' }}>
-          <p style={{ fontWeight: 700, fontSize: 15, color: '#fff', margin: '0 0 4px', letterSpacing: '-0.2px' }}>{brand.name}</p>
-          <p style={{ fontSize: 13, color: '#555', margin: '0 0 10px', lineHeight: 1.5 }}>
-            {brand.tagline?.length > 60 ? brand.tagline.slice(0, 60) + '…' : brand.tagline}
-          </p>
+        {/* Info */}
+        <div style={{ padding: '14px 16px' }}>
+          <p style={{ fontWeight: 600, fontSize: 14, margin: '0 0 4px', color: '#e8e8f0' }}>{brand.name}</p>
+          <p style={{ fontSize: 12, color: '#555', margin: '0 0 10px', lineHeight: 1.5 }}>{brand.tagline}</p>
           {brand.category && (
             <span style={{
-              fontSize: 11, fontWeight: 600, padding: '3px 8px',
-              background: '#1a1a2e', color: '#a78bfa', borderRadius: 6
-            }}>{brand.category}</span>
+              fontSize: 11, fontWeight: 500, padding: '3px 10px',
+              background: 'rgba(91,79,207,0.15)', color: '#9b8ef0',
+              border: '1px solid rgba(91,79,207,0.25)', borderRadius: 20,
+              display: 'inline-block'
+            }}>
+              {brand.category}
+            </span>
           )}
         </div>
       </div>

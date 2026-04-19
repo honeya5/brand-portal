@@ -14,15 +14,15 @@ body {
 
 :root {
   --brand: #6c5ce7;
-  --brand-light: #1a1a2e;
+  --brand-light: rgba(91,79,207,0.12);
   --brand-dark: #5a4bd1;
-  --surface: #111118;
-  --surface2: #0d0d14;
+  --surface: #0f0f1a;
+  --surface2: #080810;
   --border: #1e1e2e;
   --border2: #2a2a3e;
-  --muted: #555566;
+  --muted: #444455;
   --text: #e8e8f0;
-  --text2: #888899;
+  --text2: #555566;
   --success: #4ade80;
   --success-bg: #0d2818;
   --danger: #f87171;
@@ -35,6 +35,9 @@ input, textarea, select, button {
   font-family: 'Inter', sans-serif;
 }
 
+/* ============================================
+   BUTTONS
+   ============================================ */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -48,37 +51,74 @@ input, textarea, select, button {
   border: none;
   outline: none;
   letter-spacing: -0.1px;
+  text-decoration: none;
 }
 
 .btn-primary {
-  background: var(--brand);
+  background: linear-gradient(135deg, #5b4fcf, #7c6ee0);
   color: white;
+  border: none;
+  box-shadow: 0 4px 20px rgba(91,79,207,0.35);
 }
-.btn-primary:hover { background: var(--brand-dark); transform: translateY(-1px); }
-.btn-primary:active { transform: translateY(0); }
-.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-primary:hover {
+  box-shadow: 0 6px 28px rgba(91,79,207,0.55);
+  transform: translateY(-2px);
+  opacity: 0.95;
+}
+.btn-primary:active { transform: translateY(0); box-shadow: 0 2px 12px rgba(91,79,207,0.3); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; }
 
 .btn-outline {
   background: transparent;
-  color: var(--brand);
-  border: 1px solid var(--brand);
+  color: #9b8ef0;
+  border: 1px solid rgba(91,79,207,0.35);
 }
-.btn-outline:hover { background: var(--brand-light); }
+.btn-outline:hover {
+  background: rgba(91,79,207,0.1);
+  border-color: rgba(91,79,207,0.6);
+  color: #b8acf6;
+  transform: translateY(-1px);
+}
 
 .btn-ghost {
   background: transparent;
   color: var(--text2);
   border: 1px solid var(--border2);
 }
-.btn-ghost:hover { background: var(--surface); color: var(--text); }
+.btn-ghost:hover {
+  background: rgba(91,79,207,0.08);
+  color: #9b8ef0;
+  border-color: rgba(91,79,207,0.4);
+}
 
+/* ============================================
+   CARDS
+   ============================================ */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: #0f0f1a;
+  border: 1px solid #1e1e2e;
   border-radius: 16px;
   padding: 24px;
 }
 
+/* ============================================
+   BRAND CARD HOVER
+   ============================================ */
+.brand-card-hover {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.25s ease;
+}
+.brand-card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgba(91,79,207,0.7) !important;
+  box-shadow:
+    0 0 0 1px rgba(91,79,207,0.3),
+    0 8px 32px rgba(91,79,207,0.2),
+    0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* ============================================
+   FORM INPUTS
+   ============================================ */
 .input {
   width: 100%;
   padding: 11px 14px;
@@ -86,42 +126,64 @@ input, textarea, select, button {
   border-radius: 10px;
   font-size: 14px;
   color: var(--text);
-  background: var(--surface2);
-  transition: border-color 0.15s;
+  background: #080810;
+  transition: border-color 0.15s, box-shadow 0.15s;
   outline: none;
 }
-.input:focus { border-color: var(--brand); }
-.input::placeholder { color: var(--muted); }
+.input:focus {
+  border-color: #5b4fcf;
+  box-shadow: 0 0 0 3px rgba(91,79,207,0.12);
+}
+.input::placeholder { color: #444455; }
 
-select.input option {
-  background: var(--surface2);
-  color: var(--text);
+select.input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23555566' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
 }
 
+select.input option {
+  background: #0f0f1a;
+  color: #e8e8f0;
+}
+
+/* ============================================
+   LABELS
+   ============================================ */
 .label {
   display: block;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
-  color: var(--text2);
-  margin-bottom: 6px;
-  letter-spacing: 0.3px;
+  color: #555566;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
 }
 
 .form-group { margin-bottom: 18px; }
 
-.page { max-width: 1100px; margin: 0 auto; padding: 36px 24px; }
-.page-sm { max-width: 480px; margin: 0 auto; padding: 56px 24px; }
+/* ============================================
+   PAGE LAYOUTS
+   ============================================ */
+.page     { max-width: 1100px; margin: 0 auto; padding: 36px 24px; }
+.page-sm  { max-width: 480px;  margin: 0 auto; padding: 56px 24px; }
 
-.spinner {
-  width: 36px; height: 36px;
-  border: 2px solid var(--border2);
-  border-top-color: var(--brand);
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+/* ============================================
+   NAVBAR (targets whatever element your nav uses)
+   ============================================ */
+nav, header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(10,10,15,0.85) !important;
+  border-bottom: 1px solid #1e1e2e !important;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
 
+/* ============================================
+   BADGES
+   ============================================ */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -132,23 +194,61 @@ select.input option {
   font-weight: 600;
   letter-spacing: 0.2px;
 }
-.badge-pending  { background: var(--warning-bg); color: var(--warning); }
-.badge-approved { background: var(--success-bg); color: var(--success); }
-.badge-rejected { background: var(--danger-bg);  color: var(--danger); }
+.badge-pending  { background: rgba(251,191,36,0.12);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.25); }
+.badge-approved { background: rgba(74,222,128,0.1);   color: #4ade80; border: 1px solid rgba(74,222,128,0.2); }
+.badge-rejected { background: rgba(248,113,113,0.1);  color: #f87171; border: 1px solid rgba(248,113,113,0.2); }
 
+/* ============================================
+   SPINNER
+   ============================================ */
+.spinner {
+  width: 36px; height: 36px;
+  border: 2px solid #1e1e2e;
+  border-top-color: #6c5ce7;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ============================================
+   TOAST
+   ============================================ */
 .toast {
   position: fixed;
   bottom: 24px; right: 24px;
-  background: var(--surface);
-  color: var(--text);
-  border: 1px solid var(--border2);
+  background: #0f0f1a;
+  color: #e8e8f0;
+  border: 1px solid rgba(91,79,207,0.4);
   padding: 12px 20px;
   border-radius: 12px;
   font-size: 14px;
   font-weight: 500;
   z-index: 9999;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
   animation: slideUp 0.2s ease;
 }
-@keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes slideUp {
+  from { transform: translateY(10px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
 
-a { color: inherit; }
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #0a0a0f; }
+::-webkit-scrollbar-thumb { background: #1e1e2e; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #2a2a3e; }
+
+/* ============================================
+   PULSE (live dot animation)
+   ============================================ */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+a { color: inherit; text-decoration: none; }
