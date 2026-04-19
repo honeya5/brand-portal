@@ -77,29 +77,29 @@ export default function Dashboard() {
               </div>
             : <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {apps.map(a => (
-  <div key={a.id} style={{
-    background: '#fff',
-    border: '1px solid #e8e6e0',
-    borderRadius: 14, padding: '16px 20px',
-    display: 'flex', justifyContent: 'space-between', alignItems: 'center'
-  }}>
-    <div>
-      <p style={{ fontWeight: 500, margin: '0 0 4px', fontSize: 15 }}>{a.brandName}</p>
-      <p style={{ fontSize: 12, color: '#aaa', margin: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</p>
-    </div>
-    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-      <StatusBadge status={a.status} />
-      {a.status === 'approved' && (
-        <Link
-          to={`/chat/${a.id}/${a.brandId}/${encodeURIComponent(a.brandName)}`}
-          className="btn btn-primary"
-          style={{ textDecoration: 'none', fontSize: 12, padding: '7px 14px' }}>
-          Open chat →
-        </Link>
-      )}
-    </div>
-  </div>
-))}
+                  <div key={a.id} style={{
+                    background: '#0d0d14',
+                    border: '1px solid #1e1e2e',
+                    borderRadius: 14, padding: '16px 20px',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+                  }}>
+                    <div>
+                      <p style={{ fontWeight: 500, margin: '0 0 4px', fontSize: 15, color: '#e8e8f0' }}>{a.brandName}</p>
+                      <p style={{ fontSize: 12, color: '#555', margin: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                      <StatusBadge status={a.status} />
+                      {a.status === 'approved' && (
+                        <Link
+                          to={`/chat/${a.id}/${a.brandId}/${encodeURIComponent(a.brandName)}`}
+                          className="btn btn-primary"
+                          style={{ textDecoration: 'none', fontSize: 12, padding: '7px 14px' }}>
+                          Open chat →
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
           }
         </div>

@@ -5,32 +5,33 @@ export default function Home() {
   const { user } = useAuth()
 
   return (
-    <div style={{ background: '#f8f7f4', minHeight: '100vh' }}>
-      <div style={{ maxWidth: 760, margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
+    <div style={{ background: '#0a0a0f', minHeight: '100vh' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto', padding: '100px 24px 80px', textAlign: 'center' }}>
 
         <div style={{
-          display: 'inline-block',
-          background: '#ede9ff', color: '#5b4fcf',
-          fontSize: 13, fontWeight: 500,
-          padding: '6px 16px', borderRadius: 20, marginBottom: 28
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: '#1a1a2e', border: '1px solid #2d2d4e',
+          color: '#a78bfa', fontSize: 12, fontWeight: 600,
+          padding: '5px 14px', borderRadius: 20, marginBottom: 32
         }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#6c5ce7' }} />
           Live applications · Real-time updates
         </div>
 
         <h1 style={{
-          fontSize: 52, fontWeight: 700, lineHeight: 1.15,
-          color: '#1a1a1a', margin: '0 0 20px',
-          letterSpacing: '-1px'
+          fontSize: 56, fontWeight: 800, lineHeight: 1.1,
+          color: '#fff', margin: '0 0 20px',
+          letterSpacing: '-2px'
         }}>
-          Where brands meet<br />
-          <span style={{ color: '#5b4fcf' }}>their partners</span>
+          Where brands find<br />
+          <span style={{ color: '#6c5ce7' }}>their partners</span>
         </h1>
 
-        <p style={{ fontSize: 18, color: '#666', maxWidth: 480, margin: '0 auto 40px', lineHeight: 1.7 }}>
+        <p style={{ fontSize: 18, color: '#555', maxWidth: 460, margin: '0 auto 44px', lineHeight: 1.7 }}>
           Businesses list their brand. Customers apply for partnerships. Everything happens live.
         </p>
 
-        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
           <Link to="/explore" className="btn btn-primary" style={{ fontSize: 15, padding: '13px 28px', textDecoration: 'none' }}>
             Explore brands →
           </Link>
@@ -51,12 +52,12 @@ export default function Home() {
             { icon: '◉', title: 'Live notifications', desc: 'See applications arrive in real-time. No refresh needed.' }
           ].map(f => (
             <div key={f.title} style={{
-              background: '#fff', border: '1px solid #e8e6e0',
-              borderRadius: 12, padding: '20px'
+              background: '#111118', border: '1px solid #1e1e2e',
+              borderRadius: 14, padding: '20px'
             }}>
-              <div style={{ fontSize: 20, marginBottom: 10, color: '#5b4fcf' }}>{f.icon}</div>
-              <p style={{ fontWeight: 600, fontSize: 14, margin: '0 0 6px', color: '#1a1a1a' }}>{f.title}</p>
-              <p style={{ fontSize: 13, color: '#888', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
+              <div style={{ fontSize: 18, marginBottom: 10, color: '#6c5ce7' }}>{f.icon}</div>
+              <p style={{ fontWeight: 700, fontSize: 14, margin: '0 0 6px', color: '#fff' }}>{f.title}</p>
+              <p style={{ fontSize: 13, color: '#555', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
             </div>
           ))}
         </div>

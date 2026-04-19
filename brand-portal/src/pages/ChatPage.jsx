@@ -58,15 +58,15 @@ export default function ChatPage() {
       display: 'flex', flexDirection: 'column',
       height: 'calc(100vh - 60px)',
       maxWidth: 700, margin: '0 auto',
-      background: '#fff'
+      background: '#0d0d14'
     }}>
 
       {/* Header */}
       <div style={{
         padding: '16px 20px',
-        borderBottom: '1px solid #e8e6e0',
+        borderBottom: '1px solid #1e1e2e',
         display: 'flex', alignItems: 'center', gap: 12,
-        background: '#fff', flexShrink: 0
+        background: '#0d0d14', flexShrink: 0
       }}>
         <button
           onClick={() => nav(-1)}
@@ -86,7 +86,7 @@ export default function ChatPage() {
           {brandName?.[0]?.toUpperCase() || '?'}
         </div>
         <div>
-          <p style={{ fontWeight: 600, fontSize: 15, margin: 0 }}>{brandName}</p>
+          <p style={{ fontWeight: 600, fontSize: 15, margin: 0, color: '#e8e8f0' }}>{brandName}</p>
           <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#1a9e6e' }} />
             <p style={{ fontSize: 12, color: '#1a9e6e', margin: 0 }}>Partnership approved</p>
@@ -98,7 +98,7 @@ export default function ChatPage() {
       <div style={{
         flex: 1, overflowY: 'auto',
         padding: '20px 16px',
-        background: '#f8f7f4',
+        background: '#0a0a0f',
         display: 'flex', flexDirection: 'column', gap: 4
       }}>
         {messages.length === 0 && (
@@ -115,13 +115,13 @@ export default function ChatPage() {
               display: 'flex', alignItems: 'center', gap: 12,
               margin: '16px 0 12px'
             }}>
-              <div style={{ flex: 1, height: '1px', background: '#e8e6e0' }} />
+              <div style={{ flex: 1, height: '1px', background: '#1e1e2e' }} />
               <span style={{
-                fontSize: 11, color: '#aaa', fontWeight: 500,
-                padding: '3px 10px', background: '#ece9e3',
+                fontSize: 11, color: '#555', fontWeight: 500,
+                padding: '3px 10px', background: '#1a1a2e',
                 borderRadius: 20, flexShrink: 0
               }}>{date}</span>
-              <div style={{ flex: 1, height: '1px', background: '#e8e6e0' }} />
+              <div style={{ flex: 1, height: '1px', background: '#1e1e2e' }} />
             </div>
 
             {/* Messages for this date */}
@@ -167,10 +167,10 @@ export default function ChatPage() {
                       borderRadius: isMe
                         ? (showSender ? '18px 18px 4px 18px' : '18px 4px 4px 18px')
                         : (showSender ? '18px 18px 18px 4px' : '4px 18px 18px 4px'),
-                      background: isMe ? '#5b4fcf' : '#fff',
-                      color: isMe ? 'white' : '#1a1a1a',
+                      background: isMe ? '#5b4fcf' : '#111118',
+                      color: isMe ? 'white' : '#e8e8f0',
                       fontSize: 14, lineHeight: 1.5,
-                      border: isMe ? 'none' : '1px solid #e8e6e0',
+                      border: isMe ? 'none' : '1px solid #1e1e2e',
                       wordBreak: 'break-word'
                     }}>
                       <p style={{ margin: 0 }}>{msg.text}</p>
@@ -195,18 +195,19 @@ export default function ChatPage() {
       {/* Input bar */}
       <div style={{
         padding: '12px 16px',
-        borderTop: '1px solid #e8e6e0',
-        background: '#fff',
+        borderTop: '1px solid #1e1e2e',
+        background: '#0d0d14',
         display: 'flex', gap: 10, alignItems: 'center',
         flexShrink: 0
       }}>
         <input
           style={{
             flex: 1, padding: '12px 16px',
-            border: '1.5px solid #e8e6e0', borderRadius: 24,
+            border: '1.5px solid #1e1e2e', borderRadius: 24,
             fontSize: 14, outline: 'none',
             fontFamily: 'Inter, sans-serif',
-            background: '#f8f7f4',
+            background: '#111118',
+            color: '#e8e8f0',
             transition: 'border-color 0.15s'
           }}
           placeholder="Type a message…"
@@ -214,14 +215,14 @@ export default function ChatPage() {
           onChange={e => setText(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && !e.shiftKey && handleSend()}
           onFocus={e => e.target.style.borderColor = '#5b4fcf'}
-          onBlur={e => e.target.style.borderColor = '#e8e6e0'}
+          onBlur={e => e.target.style.borderColor = '#1e1e2e'}
         />
         <button
           onClick={handleSend}
           disabled={!text.trim() || sending}
           style={{
             width: 44, height: 44, borderRadius: '50%',
-            background: text.trim() ? '#5b4fcf' : '#e8e6e0',
+            background: text.trim() ? '#5b4fcf' : '#1e1e2e',
             border: 'none', cursor: text.trim() ? 'pointer' : 'default',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             transition: 'background 0.15s', flexShrink: 0
