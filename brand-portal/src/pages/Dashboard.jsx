@@ -5,11 +5,12 @@ import { getBrandByOwner, getBrandById } from '../firebase/brands'
 import { getMyApplications } from '../firebase/applications'
 import StatusBadge from '../components/StatusBadge'
 import LoadingSpinner from '../components/LoadingSpinner'
+import MessageThread from '../components/MessageThread'
 
 export default function Dashboard() {
   const { user, role } = useAuth()
-  const [brand, setBrand]   = useState(null)
-  const [apps, setApps]     = useState([])
+  const [brand, setBrand]     = useState(null)
+  const [apps, setApps]       = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -20,11 +21,10 @@ export default function Dashboard() {
         setBrand(b)
       } else {
         const rawApps = await getMyApplications(user.uid)
-        // For each application, fetch the brand name
         const appsWithNames = await Promise.all(
           rawApps.map(async (app) => {
-            const brand = await getBrandById(app.brandId)
-            return { ...app, brandName: brand?.name || 'Unknown Brand' }
+            const b = await getBrandById(app.brandId)
+            return { ...app, brandName: b?.name || 'Unknown Brand' }
           })
         )
         setApps(appsWithNames)
@@ -75,16 +75,31 @@ export default function Dashboard() {
             ? <div style={{ textAlign: 'center', padding: '60px 0', color: '#888', fontSize: 14 }}>
                 No applications yet. Explore brands to get started.
               </div>
-            : <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            : <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                 {apps.map(a => (
-                  <div key={a.id} className="card" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px' }}>
-                    <div>
-                      <p style={{ fontWeight: 500, margin: '0 0 4px', fontSize: 15 }}>{a.brandName}</p>
-                      <p style={{ fontSize: 12, color: '#aaa', margin: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</p>
-                    </div>
-                    <StatusBadge status={a.status} />
-                  </div>
-                ))}
+  <div key={a.id} style={{
+    background: '#fff',
+    border: '1px solid #e8e6e0',
+    borderRadius: 14, padding: '16px 20px',
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+  }}>
+    <div>
+      <p style={{ fontWeight: 500, margin: '0 0 4px', fontSize: 15 }}>{a.brandName}</p>
+      <p style={{ fontSize: 12, color: '#aaa', margin: 0 }}>{new Date(a.createdAt).toLocaleDateString()}</p>
+    </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <StatusBadge status={a.status} />
+      {a.status === 'approved' && (
+        <Link
+          to={`/chat/${a.id}/${a.brandId}/${encodeURIComponent(a.brandName)}`}
+          className="btn btn-primary"
+          style={{ textDecoration: 'none', fontSize: 12, padding: '7px 14px' }}>
+          Open chat →
+        </Link>
+      )}
+    </div>
+  </div>
+))}
               </div>
           }
         </div>

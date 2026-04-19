@@ -10,6 +10,7 @@ import Dashboard     from './pages/Dashboard'
 import ManageBrand   from './pages/ManageBrand'
 import ApplyPage     from './pages/ApplyPage'
 import Applications  from './pages/Applications'
+import ChatPage from './pages/ChatPage'
 
 export default function App() {
   return (
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/manage-brand" element={<ProtectedRoute allowedRole="business"><ManageBrand /></ProtectedRoute>} />
         <Route path="/apply/:id"    element={<ProtectedRoute allowedRole="customer"><ApplyPage /></ProtectedRoute>} />
         <Route path="/applications" element={<ProtectedRoute allowedRole="business"><Applications /></ProtectedRoute>} />
+        <Route path="/chat/:applicationId/:brandId/:otherName" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
       </Routes>
     </BrowserRouter>
   )
